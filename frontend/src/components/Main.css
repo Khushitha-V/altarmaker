@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@300;400;700;900&display=swap');
+
+/* Import App.css for base styles */
+@import '../App.css';
+
+/* Additional Main component styles with new color palette */
+.app-container {
+  background: linear-gradient(180deg, #f9f4f0 0%, #f8e4c4 25%, #f8ac8c 50%, #deacd1 75%, #d2e4e8 100%);
+  animation: gradientShift 8s ease-in-out infinite;
+  font-family: 'Comic Neue', cursive;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background: linear-gradient(180deg, #f9f4f0 0%, #f8e4c4 25%, #f8ac8c 50%, #deacd1 75%, #d2e4e8 100%); }
+  50% { background: linear-gradient(180deg, #d2e4e8 0%, #deacd1 25%, #f8ac8c 50%, #f8e4c4 75%, #f9f4f0 100%); }
+}
+
+.sidebar-container {
+  background: linear-gradient(180deg, #ffffff 0%, #f9f4f0 25%, #f8e4c4 50%, #f8ac8c 75%, #deacd1 100%);
+  border-right: 3px solid rgba(114, 56, 61, 0.4);
+  animation: slideInLeft 0.6s ease-out;
+  font-family: 'Comic Neue', cursive;
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.canvas-container {
+  background: pink;
+  font-family: 'Comic Neue', cursive;
+}
+
+/* Override any gradient backgrounds for the view toggle button */
+.view-toggle-btn {
+  background: #c9ffa9!important;
+  background-color: #c9ffa9 !important;
+  background-image: none !important;
+}
+
+.view-toggle-btn:hover {
+  background: #c9ffa9 !important;
+  background-color: #c9ffa9 !important;
+  background-image: none !important;
+}
+
+/* Admin panel button styling */
+.admin-panel-btn {
+  background: #ffd4a3 !important;
+  background-color: #ffd4a3 !important;
+  color: #d2691e !important;
+  background-image: none !important;
+}
+
+.admin-panel-btn:hover {
+  background: #ffb366 !important;
+  background-color: #ffb366 !important;
+  color: #d2691e !important;
+  background-image: none !important;
+}
+
+  /* Sidebar button styling - override gradients with solid pink */
+  #remove-wallpaper{
+    background: #faa9b1!important;
+    background-color: #faa9b1 !important;
+    background-image: none !important;
+    color: #72383d !important;
+  }
+  #save-as-new-session{
+    background: #d5e680!important;
+    background-color: #d5e680 !important;
+    background-image: none !important;
+    color: #72383d !important;
+  }
+  #save-room-design{
+    background:#efd895!important;
+    background-color:#efd895 !important;
+    background-image: none !important;
+    color: #72383d !important;
+  }
+  #save-design {
+    background: #ccc2f8 !important;
+    background-color: #ccc2f8 !important;
+    background-image: none !important;
+    color: #72383d !important;
+  }

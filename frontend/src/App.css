@@ -1,0 +1,551 @@
+/* Beautiful Soft Color Palette with Comic Font Design */
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@300;400;700;900&display=swap');
+
+.app-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #f9f4f0 0%, #f8e4c4 25%, #f8ac8c 50%, #deacd1 75%, #d2e4e8 100%);
+  animation: gradientShift 8s ease-in-out infinite;
+  font-family: 'Comic Neue', cursive;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background: linear-gradient(180deg, #f9f4f0 0%, #f8e4c4 25%, #f8ac8c 50%, #deacd1 75%, #d2e4e8 100%); }
+  50% { background: linear-gradient(180deg, #d2e4e8 0%, #deacd1 25%, #f8ac8c 50%, #f8e4c4 75%, #f9f4f0 100%); }
+}
+
+header {
+  padding: 20px;
+  background: linear-gradient(90deg, #f9f4f0 0%, #c5aa7f 50%, #f8ac8c 75%);
+  color: #72383d;
+  font-size: 24px;
+  text-align: center;
+  font-weight: 700;
+  font-family: 'Comic Neue', cursive;
+  text-shadow: 0 2px 4px rgba(255,255,255,0.8);
+  border-bottom: 3px solid rgba(114, 56, 61, 0.4);
+  box-shadow: 0 4px 20px rgba(114, 56, 61, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.content-area {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  background: linear-gradient(135deg, #f9f4f0 0%, #f8e4c4 25%, #f8ac8c 50%, #deacd1 75%, #d2e4e8 100%);
+}
+
+/* Sidebar styling with elegant gradients */
+.sidebar-container {
+  width: 200px;
+  min-width: 220px;
+  background: linear-gradient(180deg, #ffffff 0%, #f9f4f0 25%, #f8e4c4 50%, #f8ac8c 75%, #deacd1 100%);
+  border-right: 3px solid rgba(114, 56, 61, 0.4);
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  box-shadow: 4px 0 20px rgba(114, 56, 61, 0.15);
+  position: relative;
+  animation: slideInLeft 0.6s ease-out;
+  font-family: 'Comic Neue', cursive;
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.sidebar-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #f9f4f0 0%, #f8e4c4 25%, #f8ac8c 50%, #deacd1 75%, #d2e4e8 100%);
+}
+
+/* Sidebar text styling with vibrant colors */
+.sidebar-container h3,
+.sidebar-container h4,
+.sidebar-container h5,
+.sidebar-container label {
+  color: #72383d;
+  margin-bottom: 12px;
+  font-weight: 700;
+  font-family: 'Comic Neue', cursive;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+  transition: all 0.3s ease;
+}
+
+.sidebar-container h3:hover,
+.sidebar-container h4:hover,
+.sidebar-container h5:hover,
+.sidebar-container label:hover {
+  transform: translateX(5px);
+  color: #f8ac8c;
+}
+
+.sidebar-container h3:first-child {
+  margin-top: -8px;
+  margin-bottom: 20px;
+  font-size: 22px;
+  background: linear-gradient(135deg, #f8ac8c 0%, #deacd1 50%, #d2e4e8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: textGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes textGlow {
+  from { filter: drop-shadow(0 0 2px rgba(248, 172, 140, 0.3)); }
+  to { filter: drop-shadow(0 0 8px rgba(248, 172, 140, 0.6)); }
+}
+
+.sidebar-container h4 {
+  margin-top: -12px !important;
+  margin-bottom: 24px !important;
+  color: #72383d !important; 
+  font-weight:bold !important; 
+  font-size: 22px !important;
+  font-family: 'Comic Neue', cursive !important;
+  background: linear-gradient(135deg, #d2e4e8 0%, #deacd1 50%, #f8ac8c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Override for specific h4 elements with custom colors */
+.sidebar-container h4{
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: unset !important;
+  background-clip: unset !important;
+}
+
+.sidebar-container > div > h4 {
+  font-weight: 900 !important;
+}
+
+.sidebar-container p,
+.sidebar-container span {
+  margin-bottom: 8px;
+  font-family: 'Comic Neue', cursive;
+  font-weight: 500;
+  font-size: 19px;
+  transition: all 0.3s ease;
+}
+
+.sidebar-container p:hover,
+.sidebar-container span:hover {
+  color: #f8ac8c;
+  transform: scale(1.02);
+}
+
+/* Form elements with vibrant styling */
+.sidebar-container select,
+.sidebar-container input {
+  background: linear-gradient(135deg, #ffffff 0%, #f9f4f0 100%);
+  border: 3px solid rgba(114, 56, 61, 0.4);
+  color: #72383d;
+  padding: 14px 18px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(114, 56, 61, 0.2);
+  position: relative;
+  overflow: hidden;
+  font-family: 'Comic Neue', cursive;
+}
+
+.sidebar-container select::before,
+.sidebar-container input::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(114, 56, 61, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.sidebar-container select:focus,
+.sidebar-container input:focus {
+  outline: none;
+  border-color: #f8ac8c;
+  box-shadow: 0 0 0 4px rgba(248, 172, 140, 0.2);
+  background: linear-gradient(135deg, #ffffff 0%, #f9f4f0 100%);
+  transform: translateY(-2px);
+}
+
+.sidebar-container select:hover,
+.sidebar-container input:hover {
+  border-color: #deacd1;
+  box-shadow: 0 6px 12px rgba(114, 56, 61, 0.3);
+  transform: translateY(-2px);
+}
+
+.sidebar-container select:hover::before,
+.sidebar-container input:hover::before {
+  left: 100%;
+}
+
+/* Button styling with vibrant gradient effects */
+.sidebar-container button {
+  background: linear-gradient(135deg, #f8ac8c 0%, #deacd1 50%, #d2e4e8 100%);
+  color: #72383d;
+  border: none;
+  padding: 16px 24px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 700;
+  margin-bottom: 12px;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 6px 12px rgba(248, 172, 140, 0.3);
+  position: relative;
+  overflow: hidden;
+  animation: buttonPulse 2s ease-in-out infinite;
+  font-family: 'Comic Neue', cursive;
+}
+
+@keyframes buttonPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+.sidebar-container button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.6s;
+}
+
+.sidebar-container button:hover {
+  background: linear-gradient(135deg, #deacd1 0%, #d2e4e8 50%, #f9f4f0 100%);
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 12px 24px rgba(248, 172, 140, 0.4);
+}
+
+.sidebar-container button:hover::before {
+  left: 100%;
+}
+
+.sidebar-container button:active {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 12px rgba(248, 172, 140, 0.3);
+}
+
+/* Canvas area styling with vibrant effects */
+.canvas-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  background: linear-gradient(135deg, #f9f4f0 0%, #deacd1 75%);
+  overflow: auto;
+  position: relative;
+}
+
+.design-canvas {
+  position: relative;
+  width: 600px;
+  height: 900px;
+  border: 4px solid rgba(114, 56, 61, 0.6);
+  background: linear-gradient(135deg, #ffffff 0%, #f9f4f0 50%, #f8e4c4 100%);
+  overflow: hidden;
+  margin: 10px auto;
+  box-shadow: 0 12px 32px rgba(114, 56, 61, 0.3);
+  border-radius: 16px;
+  position: relative;
+  animation: canvasGlow 4s ease-in-out infinite;
+}
+
+@keyframes canvasGlow {
+  0%, 100% { box-shadow: 0 12px 32px rgba(114, 56, 61, 0.3); }
+  50% { box-shadow: 0 12px 32px rgba(114, 56, 61, 0.6), 0 0 20px rgba(114, 56, 61, 0.4); }
+}
+
+.design-canvas::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(114, 56, 61, 0.1) 50%, transparent 70%);
+  pointer-events: none;
+  animation: shimmerEffect 3s ease-in-out infinite;
+}
+
+@keyframes shimmerEffect {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+
+.design-element {
+  width: 100%;
+  height: 100%;
+  transition: all 0.3s ease;
+}
+
+.design-element:hover {
+  transform: scale(1.02);
+}
+
+.element-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+html, body, .app-container, .content-area {
+  overflow: hidden;
+}
+
+.design-canvas {
+  overflow: hidden;
+}
+
+/* Animated frame border with vibrant gradients */
+.animated-frame-border {
+  border-width: 6px;
+  border-style: dashed;
+  border-radius: inherit;
+  border-image: repeating-linear-gradient(
+    90deg,
+    #f9f4f0 0 10px,
+    #f8e4c4 10px 20px,
+    #f8ac8c 20px 30px,
+    #deacd1 30px 40px,
+    #d2e4e8 40px 50px
+  ) 30;
+  animation: borderDashMove 2s linear infinite;
+  position: relative;
+}
+
+/* Color variations for frame animations */
+.animated-frame-border.rainbow {
+  border-image: repeating-linear-gradient(
+    90deg,
+    #f8ac8c 0 10px,
+    #deacd1 10px 20px,
+    #d2e4e8 20px 30px,
+    #f9f4f0 30px 40px,
+    #f8e4c4 40px 50px
+  ) 30;
+}
+
+.animated-frame-border.fire {
+  border-image: repeating-linear-gradient(
+    90deg,
+    #f8ac8c 0 10px,
+    #deacd1 10px 20px,
+    #d2e4e8 20px 30px,
+    #f9f4f0 30px 40px,
+    #f8e4c4 40px 50px
+  ) 30;
+}
+
+.animated-frame-border.ocean {
+  border-image: repeating-linear-gradient(
+    90deg,
+    #d2e4e8 0 10px,
+    #deacd1 10px 20px,
+    #f8ac8c 20px 30px,
+    #f8e4c4 30px 40px,
+    #f9f4f0 40px 50px
+  ) 30;
+}
+
+.animated-frame-border.forest {
+  border-image: repeating-linear-gradient(
+    90deg,
+    #f9f4f0 0 10px,
+    #f8e4c4 10px 20px,
+    #f8ac8c 20px 30px,
+    #deacd1 30px 40px,
+    #d2e4e8 40px 50px
+  ) 30;
+}
+
+.animated-frame-border.purple {
+  border-image: repeating-linear-gradient(
+    90deg,
+    #deacd1 0 10px,
+    #d2e4e8 10px 20px,
+    #f8ac8c 20px 30px,
+    #f8e4c4 30px 40px,
+    #f9f4f0 40px 50px
+  ) 30;
+}
+
+.animated-frame-border.gold {
+  border-image: repeating-linear-gradient(
+    90deg,
+    #f8e4c4 0 10px,
+    #f8ac8c 10px 20px,
+    #deacd1 20px 30px,
+    #d2e4e8 30px 40px,
+    #f9f4f0 40px 50px
+  ) 30;
+}
+
+@keyframes borderDashMove {
+  0% { border-image-slice: 1; }
+  100% { border-image-slice: 30; }
+}
+
+/* Specific styling for room type selection */
+#room-select {
+  font-size: 16px !important;
+  font-weight: 600;
+  background: linear-gradient(135deg, #ffffff 0%, #f9f4f0 100%);
+  font-family: 'Comic Neue', cursive;
+}
+
+/* Specific styling for wall selection */
+#wall-select {
+  font-size: 16px !important;
+  font-weight: 600;
+  background: linear-gradient(135deg, #ffffff 0%, #f9f4f0 100%);
+  font-family: 'Comic Neue', cursive;
+}
+
+/* Enhanced label styling with vibrant colors */
+.sidebar-container label {
+  font-size: 16px !important;
+  font-weight: 700;
+  color: #72383d;
+  margin-bottom: 10px;
+  font-family: 'Comic Neue', cursive !important;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+  background: linear-gradient(135deg, #f8ac8c 0%, #deacd1 50%, #d2e4e8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition: all 0.3s ease;
+}
+
+.sidebar-container label:hover {
+  transform: translateX(5px);
+  background: linear-gradient(135deg, #deacd1 0%, #d2e4e8 50%, #f9f4f0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Override for labels with custom colors */
+.sidebar-container label[style*="color"] {
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: unset !important;
+  background-clip: unset !important;
+}
+
+/* Override for labels with custom font sizes */
+.sidebar-container label[style*="fontSize"] {
+  font-size: unset !important;
+}
+
+/* Scrollbar styling for sidebar with vibrant colors */
+.sidebar-container::-webkit-scrollbar {
+  width: 10px;
+}
+
+.sidebar-container::-webkit-scrollbar-track {
+  background: linear-gradient(180deg, #f9f4f0 0%, #f8e4c4 100%);
+  border-radius: 6px;
+}
+
+.sidebar-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #f8ac8c 0%, #deacd1 100%);
+  border-radius: 6px;
+  border: 2px solid #d2e4e8;
+  transition: all 0.3s ease;
+}
+
+.sidebar-container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #deacd1 0%, #d2e4e8 100%);
+  transform: scale(1.1);
+}
+
+/* Additional hover effects for interactive elements */
+.sidebar-container select:hover,
+.sidebar-container input:hover {
+  background: linear-gradient(135deg, #ffffff 0%, #f9f4f0 100%);
+  transform: translateY(-2px);
+}
+
+/* Focus states for accessibility */
+.sidebar-container select:focus,
+.sidebar-container input:focus,
+.sidebar-container button:focus {
+  outline: 3px solid #f8ac8c;
+  outline-offset: 3px;
+}
+
+/* Loading animation for elements */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sidebar-container > * {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Floating animation for cards */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.stat-card, .user-card {
+  animation: float 6s ease-in-out infinite;
+}

@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@300;400;700;900&display=swap');
+
+/* Global styles with beautiful soft color palette */
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: linear-gradient(180deg, #f9f4f0 0%, #f8e4c4 25%, #f8ac8c 50%, #deacd1 75%, #d2e4e8 100%);
+  animation: gradientShift 8s ease-in-out infinite;
+  font-family: 'Comic Neue', cursive;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background: linear-gradient(180deg, #f9f4f0 0%, #f8e4c4 25%, #f8ac8c 50%, #deacd1 75%, #d2e4e8 100%); }
+  50% { background: linear-gradient(180deg, #d2e4e8 0%, #deacd1 25%, #f8ac8c 50%, #f8e4c4 75%, #f9f4f0 100%); }
+}
+
+a {
+  font-weight: 600;
+  color: #72383d;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-family: 'Comic Neue', cursive;
+}
+
+a:hover {
+  color: #f8ac8c;
+  transform: translateY(-2px);
+}
+
+body {
+  background: linear-gradient(180deg, #f9f4f0 0%, #f8e4c4 25%, #f8ac8c 50%, #deacd1 75%, #d2e4e8 100%);
+  animation: gradientShift 8s ease-in-out infinite;
+  font-family: 'Comic Neue', cursive;
+}
+
+h1 {
+  background: linear-gradient(135deg, #f8ac8c 0%, #deacd1 50%, #d2e4e8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: textGlow 2s ease-in-out infinite alternate;
+  font-family: 'Comic Neue', cursive;
+}
+
+@keyframes textGlow {
+  from { filter: drop-shadow(0 0 2px rgba(248, 172, 140, 0.3)); }
+  to { filter: drop-shadow(0 0 8px rgba(248, 172, 140, 0.6)); }
+}
+
+button {
+  border-radius: 12px;
+  border: 3px solid rgba(114, 56, 61, 0.4);
+  padding: 12px 24px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #f8ac8c 0%, #deacd1 50%, #d2e4e8 100%);
+  box-shadow: 0 6px 12px rgba(248, 172, 140, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  animation: buttonPulse 2s ease-in-out infinite;
+  font-family: 'Comic Neue', cursive;
+  color: #72383d;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+@keyframes buttonPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+button:hover {
+  background: linear-gradient(135deg, #deacd1 0%, #d2e4e8 50%, #f9f4f0 100%);
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 12px 24px rgba(248, 172, 140, 0.4);
+}
+
+button:focus,
+button:focus-visible {
+  outline: 3px solid #f8ac8c;
+  outline-offset: 3px;
+}
+
+/* Light mode colors */
+:root {
+  color: #72383d;
+  background-color: linear-gradient(180deg, #f9f4f0 0%, #f8e4c4 25%, #f8ac8c 50%, #deacd1 75%, #d2e4e8 100%);
+}
+
+a:hover {
+  color: #f8ac8c;
+}
+
+button {
+  background: linear-gradient(135deg, #f8ac8c 0%, #deacd1 50%, #d2e4e8 100%);
+  color: #72383d;
+}

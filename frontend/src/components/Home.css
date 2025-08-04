@@ -1,0 +1,531 @@
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@300;400;700;900&display=swap');
+
+.home-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 70px;
+  background: linear-gradient(180deg, #f9f4f0 0%, #f8e4c4 25%, #f8ac8c 50%, #deacd1 75%, #d2e4e8 100%);
+  animation: gradientShift 8s ease-in-out infinite;
+  font-family: 'Comic Neue', cursive;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background: linear-gradient(180deg, #f9f4f0 0%, #f8e4c4 25%, #f8ac8c 50%, #deacd1 75%, #d2e4e8 100%); }
+  50% { background: linear-gradient(180deg, #d2e4e8 0%, #deacd1 25%, #f8ac8c 50%, #f8e4c4 75%, #f9f4f0 100%); }
+}
+
+.home-content {
+  display: flex;
+  max-width: 1000px;
+  width: 100%;
+  background: linear-gradient(135deg, #ffffff 0%, #f9f4f0 25%, #f8e4c4 50%, #f8ac8c 75%, #deacd1 100%);
+  border-radius: 24px;
+  box-shadow: 0 24px 48px rgba(114, 56, 61, 0.3);
+  overflow: hidden;
+  backdrop-filter: blur(15px);
+  margin-top: 0;
+  border: 3px solid rgba(114, 56, 61, 0.4);
+  animation: slideInUp 0.8s ease-out;
+  font-family: 'Comic Neue', cursive;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.logo-section {
+  flex: 1;
+  background: linear-gradient(135deg, #e1bda0 25%, #c4d8ec 60%, #acda96 75%);
+  color: #72383d;
+  padding: 48px 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Comic Neue', cursive;
+}
+
+.logo-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  animation: shimmer 4s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.logo {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 32px;
+  border-radius: 24px;
+  box-shadow: 0 16px 32px rgba(114, 56, 61, 0.3);
+  animation: logoFloat 6s ease-in-out infinite;
+  font-family: 'Comic Neue', cursive;
+}
+
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.app-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin: 0 0 12px 0;
+  color: #72383d !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: unset !important;
+  background-clip: unset !important;
+  animation: none !important;
+  font-family: 'Comic Neue', cursive;
+}
+
+.app-subtitle {
+  font-size: 1.1rem;
+  margin: 0;
+  opacity: 0.9;
+  font-weight: 400;
+  color: #72383d;
+  font-family: 'Comic Neue', cursive;
+}
+
+.login-section {
+  flex: 1;
+  padding: 48px 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #ffffff 0%, #f9f4f0 100%);
+  position: relative;
+  overflow: hidden;
+  font-family: 'Comic Neue', cursive;
+  min-height: 100%;
+}
+
+.login-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(114, 56, 61, 0.1), transparent);
+  animation: shimmer 4s infinite;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  height: 500px;
+  animation: fadeInUp 1s ease-out;
+  font-family: 'Comic Neue', cursive;
+}
+
+/* Register form specific scrollbar */
+.login-card.register-mode {
+  overflow-y: auto;
+  padding-right: 8px;
+  height: 500px;
+}
+
+/* Custom scrollbar styling for register form */
+.login-card.register-mode::-webkit-scrollbar {
+  width: 8px;
+}
+
+.login-card.register-mode::-webkit-scrollbar-track {
+  background: linear-gradient(135deg, #f9f4f0 0%, #f8e4c4 100%);
+  border-radius: 10px;
+  border: 2px solid rgba(114, 56, 61, 0.2);
+}
+
+.login-card.register-mode::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #f8ac8c 0%, #deacd1 100%);
+  border-radius: 10px;
+  border: 2px solid rgba(248, 172, 140, 0.3);
+  transition: all 0.3s ease;
+}
+
+.login-card.register-mode::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #deacd1 0%, #d2e4e8 100%);
+  box-shadow: 0 2px 4px rgba(248, 172, 140, 0.4);
+}
+
+/* Firefox scrollbar for register form */
+.login-card.register-mode {
+  scrollbar-width: thin;
+  scrollbar-color: #f8ac8c #f9f4f0;
+}
+
+/* Ensure register form has proper spacing */
+.login-card[data-mode="register"] .login-form {
+  gap: 24px;
+}
+
+.login-card[data-mode="register"] .form-group {
+  margin-bottom: 8px;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.auth-mode-toggle {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #f9f4f0 0%, #f8e4c4 100%);
+  padding: 8px;
+  border-radius: 12px;
+  border: 3px solid rgba(114, 56, 61, 0.4);
+  font-family: 'Comic Neue', cursive;
+}
+
+.login-mode-toggle {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #f9f4f0 0%, #f8e4c4 100%);
+  padding: 8px;
+  border-radius: 12px;
+  border: 3px solid rgba(114, 56, 61, 0.4);
+  font-family: 'Comic Neue', cursive;
+}
+
+.toggle-btn {
+  flex: 1;
+  padding: 10px 16px;
+  border: 3px solid transparent;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #ffffff 0%, #f9f4f0 100%);
+  color: #72383d;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Comic Neue', cursive;
+}
+
+.toggle-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(114, 56, 61, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.toggle-btn:hover {
+  background: linear-gradient(135deg, #f8e4c4 0%, #f8ac8c 100%);
+  color: #72383d;
+  transform: translateY(-2px);
+}
+
+.toggle-btn:hover::before {
+  left: 100%;
+}
+
+.toggle-btn.active {
+  background: linear-gradient(135deg, #f8ac8c 0%, #deacd1 100%);
+  color: #72383d;
+  border-color: rgba(248, 172, 140, 0.4);
+  box-shadow: 0 4px 8px rgba(248, 172, 140, 0.3);
+  animation: buttonPulse 2s ease-in-out infinite;
+  font-weight: 700;
+}
+
+@keyframes buttonPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+.toggle-btn:disabled {
+  background: linear-gradient(135deg, #f9f4f0 0%, #f8e4c4 100%);
+  color: #72383d;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.toggle-btn:disabled:hover {
+  background: linear-gradient(135deg, #f9f4f0 0%, #f8e4c4 100%);
+  transform: none;
+}
+
+.login-card h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  color: #72383d;
+  background: linear-gradient(135deg, #d2e4e8 0%, #deacd1 50%, #f8ac8c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: textGlow 2s ease-in-out infinite alternate;
+  font-family: 'Comic Neue', cursive;
+}
+
+.login-card p {
+  color: #72383d;
+  margin: 0 0 28px 0;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: 'Comic Neue', cursive;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  font-family: 'Comic Neue', cursive;
+  padding-bottom: 20px;
+  min-height: 400px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: 'Comic Neue', cursive;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #72383d;
+  font-size: 0.9rem;
+  font-family: 'Comic Neue', cursive;
+  transition: all 0.3s ease;
+}
+
+.form-group label:hover {
+  color: #f8ac8c;
+  transform: translateX(5px);
+}
+
+.form-group input {
+  padding: 14px 18px;
+  border: 3px solid rgba(114, 56, 61, 0.4);
+  border-radius: 12px;
+  font-size: 1rem;
+  background: linear-gradient(135deg, #ffffff 0%, #f9f4f0 100%);
+  font-weight: 500;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Comic Neue', cursive;
+}
+
+.form-group input::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(114, 56, 61, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #f8ac8c;
+  box-shadow: 0 0 0 4px rgba(248, 172, 140, 0.2);
+  transform: translateY(-2px);
+}
+
+.form-group input:hover::before {
+  left: 100%;
+}
+
+.form-group input[type="checkbox"] {
+  margin-right: 8px;
+  transform: scale(1.2);
+  accent-color: #f8ac8c;
+}
+
+.form-group label[for="terms"] {
+  display: flex;
+  align-items: center;
+  font-size: 0.85rem;
+  color: #72383d;
+  cursor: pointer;
+}
+
+
+
+.login-button {
+  background: linear-gradient(135deg, #f8ac8c 0%, #deacd1 50%, #d2e4e8 100%);
+  color: #72383d;
+  border: none;
+  padding: 16px 24px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 12px;
+  box-shadow: 0 6px 12px rgba(248, 172, 140, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  animation: buttonPulse 2s ease-in-out infinite;
+  font-family: 'Comic Neue', cursive;
+}
+
+.login-button:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 24px rgba(248, 172, 140, 0.4);
+  background: linear-gradient(135deg, #deacd1 0%, #d2e4e8 50%, #f9f4f0 100%);
+}
+
+.login-button:active {
+  transform: translateY(-2px) scale(1.01);
+}
+
+.login-button.admin {
+  background: linear-gradient(135deg, #d2e4e8 0%, #deacd1 100%);
+  color: #72383d;
+}
+
+.login-button.admin:hover {
+  box-shadow: 0 12px 24px rgba(210, 228, 232, 0.4);
+  background: linear-gradient(135deg, #deacd1 0%, #f8ac8c 100%);
+}
+
+.success-message {
+  background: linear-gradient(135deg, #d2e4e8 0%, #deacd1 100%);
+  color: #72383d;
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: 3px solid rgba(210, 228, 232, 0.3);
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+  font-weight: 600;
+  animation: slideInRight 0.6s ease-out;
+  font-family: 'Comic Neue', cursive;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.login-button:disabled {
+  background: linear-gradient(135deg, #f9f4f0 0%, #f8e4c4 100%);
+  color: #72383d;
+  cursor: not-allowed;
+  transform: none;
+  opacity: 0.6;
+  animation: none;
+}
+
+.error-message {
+  background: linear-gradient(135deg, #f8ac8c 0%, #deacd1 100%);
+  color: #72383d;
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: 3px solid rgba(248, 172, 140, 0.3);
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+  font-weight: 600;
+  animation: slideInRight 0.6s ease-out;
+  font-family: 'Comic Neue', cursive;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .home-content {
+    flex-direction: column;
+    max-width: 500px;
+  }
+  
+  .logo-section {
+    padding: 40px 24px;
+  }
+  
+  .login-section {
+    padding: 40px 24px;
+  }
+  
+  .login-card {
+    height: 450px;
+  }
+  
+  .login-card.register-mode {
+    height: 450px;
+  }
+  
+  .app-title {
+    color: #72383d !important;
+    font-size: 2.4rem;
+    background: none !important;
+    -webkit-background-clip: unset !important;
+    -webkit-text-fill-color: unset !important;
+    background-clip: unset !important;
+    animation: none !important;
+  }
+  
+  .logo {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-container {
+    padding: 10px;
+  }
+  
+  .home-content {
+    border-radius: 20px;
+  }
+  
+  .logo-section,
+  .login-section {
+    padding: 32px 20px;
+  }
+  
+  .login-card {
+    height: 400px;
+  }
+  
+  .login-card.register-mode {
+    height: 400px;
+  }
+} 
