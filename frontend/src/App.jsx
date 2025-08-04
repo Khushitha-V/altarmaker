@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Welcome from './components/Welcome';
 import Home from './components/Home';
 import Main from './components/Main';
+import { API_BASE_URL } from './config';
 import './App.css';
 
 const LoadingSpinner = () => (
@@ -43,7 +44,7 @@ const App = () => {
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/auth/status', {
+        const response = await fetch(`${API_BASE_URL}/api/auth/status`, {
           method: 'GET',
           credentials: 'include',
         });
@@ -71,7 +72,7 @@ const App = () => {
 
   const handleLogout = async () => {
     try {
-      await fetch('http://localhost:5000/api/auth/logout', {
+      await fetch(`${API_BASE_URL}/api/auth/logout`, {
         method: 'POST',
         credentials: 'include',
       });
