@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from "react";
 import Cropper from "react-easy-crop";
 import html2canvas from "html2canvas";
+import AlertModal from "./AlertModal";
 
 const initialFrames = [
   { type: "rectangle", label: "Square" },
@@ -56,6 +57,51 @@ const Sidebar = ({ addFrame, addSticker, stickers, stickerCategories = [], setWa
     width: 8,
     height: 4
   });
+
+  // Alert modal state
+  const [alertModal, setAlertModal] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    type: 'info',
+    onConfirm: null,
+    onCancel: null,
+    confirmText: 'OK',
+    cancelText: 'Cancel',
+    showCancel: false
+  });
+
+  // Helper functions for showing alerts and confirmations
+  const showAlert = (title, message, type = 'info', onConfirm = null) => {
+    setAlertModal({
+      isOpen: true,
+      title,
+      message,
+      type,
+      onConfirm: onConfirm || (() => setAlertModal(prev => ({ ...prev, isOpen: false }))),
+      onCancel: () => setAlertModal(prev => ({ ...prev, isOpen: false })),
+      confirmText: 'OK',
+      cancelText: 'Cancel',
+      showCancel: false
+    });
+  };
+
+  const showConfirmation = (title, message, onConfirm, onCancel = null) => {
+    setAlertModal({
+      isOpen: true,
+      title,
+      message,
+      type: 'warning',
+      onConfirm: () => {
+        onConfirm();
+        setAlertModal(prev => ({ ...prev, isOpen: false }));
+      },
+      onCancel: onCancel || (() => setAlertModal(prev => ({ ...prev, isOpen: false }))),
+      confirmText: 'OK',
+      cancelText: 'Cancel',
+      showCancel: true
+    });
+  };
 
   // Sync local state with props when they change (e.g., when session is loaded)
   React.useEffect(() => {
@@ -171,7 +217,7 @@ const Sidebar = ({ addFrame, addSticker, stickers, stickerCategories = [], setWa
       );
       
       if (editedWalls.length === 0) {
-        alert('No edited walls found to download. Please add some designs first.');
+        showAlert('No Designs Found', 'No edited walls found to download. Please add some designs first.', 'warning');
         return;
       }
 
@@ -359,11 +405,11 @@ const Sidebar = ({ addFrame, addSticker, stickers, stickerCategories = [], setWa
       document.body.removeChild(link);
       
       console.log('All wall designs downloaded successfully!');
-      alert(`All wall designs downloaded successfully! ${editedWalls.length} wall(s) included.`);
+      showAlert('Success', `All wall designs downloaded successfully! ${editedWalls.length} wall(s) included.`, 'success');
       
     } catch (error) {
       console.error('Error saving all wall designs:', error);
-      alert('Error saving wall designs. Please try again. Make sure all images are loaded.');
+      showAlert('Error', 'Error saving wall designs. Please try again. Make sure all images are loaded.', 'error');
     }
   };
 
@@ -909,6 +955,19 @@ const Sidebar = ({ addFrame, addSticker, stickers, stickerCategories = [], setWa
           </div>
         </div>
       )}
+
+      {/* Alert Modal */}
+      <AlertModal
+        isOpen={alertModal.isOpen}
+        title={alertModal.title}
+        message={alertModal.message}
+        type={alertModal.type}
+        onConfirm={alertModal.onConfirm}
+        onCancel={alertModal.onCancel}
+        confirmText={alertModal.confirmText}
+        cancelText={alertModal.cancelText}
+        showCancel={alertModal.showCancel}
+      />
       </>
     );
   };

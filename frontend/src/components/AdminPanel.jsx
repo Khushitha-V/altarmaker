@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './AdminPanel.css';
+import AlertModal from './AlertModal';
 
 const AdminPanel = ({ user, onClose }) => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -8,6 +9,51 @@ const AdminPanel = ({ user, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+
+  // Alert modal state
+  const [alertModal, setAlertModal] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    type: 'info',
+    onConfirm: null,
+    onCancel: null,
+    confirmText: 'OK',
+    cancelText: 'Cancel',
+    showCancel: false
+  });
+
+  // Helper functions for showing alerts and confirmations
+  const showAlert = (title, message, type = 'info', onConfirm = null) => {
+    setAlertModal({
+      isOpen: true,
+      title,
+      message,
+      type,
+      onConfirm: onConfirm || (() => setAlertModal(prev => ({ ...prev, isOpen: false }))),
+      onCancel: () => setAlertModal(prev => ({ ...prev, isOpen: false })),
+      confirmText: 'OK',
+      cancelText: 'Cancel',
+      showCancel: false
+    });
+  };
+
+  const showConfirmation = (title, message, onConfirm, onCancel = null) => {
+    setAlertModal({
+      isOpen: true,
+      title,
+      message,
+      type: 'warning',
+      onConfirm: () => {
+        onConfirm();
+        setAlertModal(prev => ({ ...prev, isOpen: false }));
+      },
+      onCancel: onCancel || (() => setAlertModal(prev => ({ ...prev, isOpen: false }))),
+      confirmText: 'OK',
+      cancelText: 'Cancel',
+      showCancel: true
+    });
+  };
 
   const API_BASE_URL = 'http://localhost:5000/api';
 
@@ -69,30 +115,32 @@ const AdminPanel = ({ user, onClose }) => {
   const deleteUser = async (userId, username) => {
     const confirmMessage = `Are you sure you want to delete user "${username}"?\n\nThis will permanently delete:\n• User account\n• All user sessions\n• All user wall designs\n\nThis action cannot be undone.`;
     
-    if (!window.confirm(confirmMessage)) {
-      return;
-    }
+    showConfirmation(
+      'Delete User',
+      confirmMessage,
+      async () => {
+        try {
+          const response = await fetch(`${API_BASE_URL}/admin/users/${userId}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+          });
 
-    try {
-      const response = await fetch(`${API_BASE_URL}/admin/users/${userId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      });
-
-      if (response.ok) {
-        // Remove user from list
-        setUsers(prev => prev.filter(user => user._id !== userId));
-        alert(`✅ User "${username}" deleted successfully.\n\nAll associated data has been removed.`);
-      } else {
-        const errorData = await response.json();
-        alert(`❌ Error deleting user: ${errorData.error || 'Unknown error'}`);
+          if (response.ok) {
+            // Remove user from list
+            setUsers(prev => prev.filter(user => user._id !== userId));
+            showAlert('Success', `✅ User "${username}" deleted successfully.\n\nAll associated data has been removed.`, 'success');
+          } else {
+            const errorData = await response.json();
+            showAlert('Error', `❌ Error deleting user: ${errorData.error || 'Unknown error'}`, 'error');
+          }
+        } catch (error) {
+          showAlert('Error', '❌ Error deleting user. Please try again.', 'error');
+        }
       }
-    } catch (error) {
-      alert('❌ Error deleting user. Please try again.');
-    }
+    );
   };
 
   // Create admin user
@@ -110,15 +158,15 @@ const AdminPanel = ({ user, onClose }) => {
       if (response.ok) {
         const data = await response.json();
         setUsers(prev => [...prev, data.user]);
-        alert('Admin user created successfully.');
+        showAlert('Success', 'Admin user created successfully.', 'success');
         return true;
       } else {
         const errorData = await response.json();
-        alert(`Error creating admin user: ${errorData.error || 'Unknown error'}`);
+        showAlert('Error', `Error creating admin user: ${errorData.error || 'Unknown error'}`, 'error');
         return false;
       }
     } catch (error) {
-      alert('Error creating admin user. Please try again.');
+      showAlert('Error', 'Error creating admin user. Please try again.', 'error');
       return false;
     }
   };
@@ -127,68 +175,72 @@ const AdminPanel = ({ user, onClose }) => {
   const promoteToAdmin = async (userId, username) => {
     const confirmMessage = `Are you sure you want to promote "${username}" to admin?\n\nThis will give them full administrative privileges including:\n• User management\n• System statistics access\n• Ability to promote other users\n\nThis action can be reversed by demoting them later.`;
     
-    if (!window.confirm(confirmMessage)) {
-      return;
-    }
+    showConfirmation(
+      'Promote to Admin',
+      confirmMessage,
+      async () => {
+        try {
+          const response = await fetch(`${API_BASE_URL}/admin/users/${userId}/promote`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+          });
 
-    try {
-      const response = await fetch(`${API_BASE_URL}/admin/users/${userId}/promote`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      });
-
-      if (response.ok) {
-        // Update user role in the list
-        setUsers(prev => prev.map(user => 
-          user._id === userId 
-            ? { ...user, role: 'admin' }
-            : user
-        ));
-        alert(`✅ User "${username}" promoted to admin successfully!\n\nThey can now login as admin and access the admin panel.`);
-      } else {
-        const errorData = await response.json();
-        alert(`❌ Error promoting user: ${errorData.error || 'Unknown error'}`);
+          if (response.ok) {
+            // Update user role in the list
+            setUsers(prev => prev.map(user => 
+              user._id === userId 
+                ? { ...user, role: 'admin' }
+                : user
+            ));
+            showAlert('Success', `✅ User "${username}" promoted to admin successfully!\n\nThey can now login as admin and access the admin panel.`, 'success');
+          } else {
+            const errorData = await response.json();
+            showAlert('Error', `❌ Error promoting user: ${errorData.error || 'Unknown error'}`, 'error');
+          }
+        } catch (error) {
+          showAlert('Error', '❌ Error promoting user. Please try again.', 'error');
+        }
       }
-    } catch (error) {
-      alert('❌ Error promoting user. Please try again.');
-    }
+    );
   };
 
   // Demote admin to regular user
   const demoteAdmin = async (userId, username) => {
     const confirmMessage = `Are you sure you want to demote "${username}" from admin to regular user?\n\nThis will remove their administrative privileges:\n• No access to admin panel\n• No user management\n• No system statistics\n\nThey will become a regular user again.`;
     
-    if (!window.confirm(confirmMessage)) {
-      return;
-    }
+    showConfirmation(
+      'Demote Admin',
+      confirmMessage,
+      async () => {
+        try {
+          const response = await fetch(`${API_BASE_URL}/admin/users/${userId}/demote`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+          });
 
-    try {
-      const response = await fetch(`${API_BASE_URL}/admin/users/${userId}/demote`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      });
-
-      if (response.ok) {
-        // Update user role in the list
-        setUsers(prev => prev.map(user => 
-          user._id === userId 
-            ? { ...user, role: 'user' }
-            : user
-        ));
-        alert(`✅ Admin "${username}" demoted to regular user successfully!\n\nThey will no longer have admin privileges.`);
-      } else {
-        const errorData = await response.json();
-        alert(`❌ Error demoting admin: ${errorData.error || 'Unknown error'}`);
+          if (response.ok) {
+            // Update user role in the list
+            setUsers(prev => prev.map(user => 
+              user._id === userId 
+                ? { ...user, role: 'user' }
+                : user
+            ));
+            showAlert('Success', `✅ Admin "${username}" demoted to regular user successfully!\n\nThey will no longer have admin privileges.`, 'success');
+          } else {
+            const errorData = await response.json();
+            showAlert('Error', `❌ Error demoting admin: ${errorData.error || 'Unknown error'}`, 'error');
+          }
+        } catch (error) {
+          showAlert('Error', '❌ Error demoting admin. Please try again.', 'error');
+        }
       }
-    } catch (error) {
-      alert('❌ Error demoting admin. Please try again.');
-    }
+    );
   };
 
   // Filter users based on search term
@@ -348,6 +400,19 @@ const AdminPanel = ({ user, onClose }) => {
         <div className="admin-panel-footer">
           <p>Logged in as: <strong>{user.username}</strong> ({user.role})</p>
         </div>
+
+        {/* Alert Modal */}
+        <AlertModal
+          isOpen={alertModal.isOpen}
+          title={alertModal.title}
+          message={alertModal.message}
+          type={alertModal.type}
+          onConfirm={alertModal.onConfirm}
+          onCancel={alertModal.onCancel}
+          confirmText={alertModal.confirmText}
+          cancelText={alertModal.cancelText}
+          showCancel={alertModal.showCancel}
+        />
       </div>
     </div>
   );

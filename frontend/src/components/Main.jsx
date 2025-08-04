@@ -6,6 +6,8 @@ import Sidebar from "./Sidebar";
 import Canvas from "./Canvas";
 import Room3D from "./Room3D";
 import SessionModal from "./SessionModal";
+import AlertModal from "./AlertModal";
+import InputModal from "./InputModal";
 import AdminPanel from "./AdminPanel";
 import "./Main.css";
 
@@ -66,6 +68,81 @@ const Main = ({ user, onLogout }) => {
   const [isSessionModalOpen, setIsSessionModalOpen] = React.useState(false);
   const [availableSessions, setAvailableSessions] = React.useState([]);
   const [isLoadingSessions, setIsLoadingSessions] = React.useState(false);
+
+  // Alert modal state
+  const [alertModal, setAlertModal] = React.useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    type: 'info',
+    onConfirm: null,
+    onCancel: null,
+    confirmText: 'OK',
+    cancelText: 'Cancel',
+    showCancel: false
+  });
+
+  // Input modal state
+  const [inputModal, setInputModal] = React.useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    defaultValue: '',
+    placeholder: '',
+    onConfirm: null,
+    onCancel: null,
+    confirmText: 'OK',
+    cancelText: 'Cancel'
+  });
+
+  // Helper functions for showing alerts and confirmations
+  const showAlert = (title, message, type = 'info', onConfirm = null) => {
+    setAlertModal({
+      isOpen: true,
+      title,
+      message,
+      type,
+      onConfirm: onConfirm || (() => setAlertModal(prev => ({ ...prev, isOpen: false }))),
+      onCancel: () => setAlertModal(prev => ({ ...prev, isOpen: false })),
+      confirmText: 'OK',
+      cancelText: 'Cancel',
+      showCancel: false
+    });
+  };
+
+  const showConfirmation = (title, message, onConfirm, onCancel = null) => {
+    setAlertModal({
+      isOpen: true,
+      title,
+      message,
+      type: 'warning',
+      onConfirm: () => {
+        onConfirm();
+        setAlertModal(prev => ({ ...prev, isOpen: false }));
+      },
+      onCancel: onCancel || (() => setAlertModal(prev => ({ ...prev, isOpen: false }))),
+      confirmText: 'OK',
+      cancelText: 'Cancel',
+      showCancel: true
+    });
+  };
+
+  const showInputModal = (title, message, defaultValue = '', placeholder = '', onConfirm, onCancel = null) => {
+    setInputModal({
+      isOpen: true,
+      title,
+      message,
+      defaultValue,
+      placeholder,
+      onConfirm: (value) => {
+        onConfirm(value);
+        setInputModal(prev => ({ ...prev, isOpen: false }));
+      },
+      onCancel: onCancel || (() => setInputModal(prev => ({ ...prev, isOpen: false }))),
+      confirmText: 'Save',
+      cancelText: 'Cancel'
+    });
+  };
 
   // Function to save wall designs to backend
   const saveWallDesignsToBackend = useCallback(async (designs) => {
@@ -186,14 +263,27 @@ const Main = ({ user, onLogout }) => {
       // If no session loaded, prompt for name and create new session
       if (!sessionId) {
         const defaultName = `${roomType || 'Room'} - ${new Date().toLocaleString()}`;
-        sessionName = prompt('Enter a name for this session:', defaultName);
-        if (!sessionName || !sessionName.trim()) {
-          alert('Session name is required. Save cancelled.');
-          return;
-        }
-        isUpdate = false;
+        
+        showInputModal(
+          'Save Session',
+          'Enter a name for this session:',
+          defaultName,
+          'Enter session name...',
+          (inputSessionName) => {
+            if (!inputSessionName || !inputSessionName.trim()) {
+              showAlert('Session Name Required', 'Session name is required. Save cancelled.', 'error');
+              return;
+            }
+            sessionName = inputSessionName.trim();
+            isUpdate = false;
+            // Continue with the save operation
+            saveRoomDesignWithName(sessionName, isUpdate);
+          }
+        );
+        return; // Exit early, the save will continue in the callback
       } else {
         isUpdate = true;
+        sessionName = loadedSessionName;
       }
 
       const sessionData = {
@@ -235,16 +325,71 @@ const Main = ({ user, onLogout }) => {
         setLoadedSessionKey(sessionId);
         setLoadedSessionName(sessionName.trim());
         console.log(`Room design ${isUpdate ? 'updated' : 'saved'} as session successfully`);
-        alert(`Room design ${isUpdate ? 'updated' : 'saved'} as session!`);
+        showAlert('Success', `Room design ${isUpdate ? 'updated' : 'saved'} as session!`, 'success');
       } else {
         const errorData = await response.json();
-        alert(`Error saving session: ${errorData.error || 'Unknown error'}`);
+        showAlert('Error', `Error saving session: ${errorData.error || 'Unknown error'}`, 'error');
       }
     } catch (error) {
       console.error('Error saving room design session:', error);
-      alert('Error saving room design session. Please try again.');
+      showAlert('Error', 'Error saving room design session. Please try again.', 'error');
     }
   }, [roomType, selectedWall, roomDimensions, wallDesigns, loadedSessionKey, loadedSessionName]);
+
+  // Helper function to save room design with a specific name
+  const saveRoomDesignWithName = useCallback(async (sessionName, isUpdate) => {
+    try {
+      let sessionId = loadedSessionKey;
+
+      const sessionData = {
+        session_name: sessionName,
+        room_type: roomType,
+        room_dimensions: roomDimensions,
+        wall_designs: wallDesigns,
+        selected_wall: selectedWall
+      };
+
+      let response;
+      if (isUpdate) {
+        // Update existing session
+        response = await fetch(`${API_BASE_URL}/sessions/${sessionId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify(sessionData),
+        });
+      } else {
+        // Create new session
+        response = await fetch(`${API_BASE_URL}/sessions`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify(sessionData),
+        });
+      }
+
+      if (response.ok) {
+        const data = await response.json();
+        if (!isUpdate) {
+          sessionId = data.session._id;
+        }
+        setLoadedSessionKey(sessionId);
+        setLoadedSessionName(sessionName);
+        console.log(`Room design ${isUpdate ? 'updated' : 'saved'} as session successfully`);
+        showAlert('Success', `Room design ${isUpdate ? 'updated' : 'saved'} as session!`, 'success');
+      } else {
+        const errorData = await response.json();
+        showAlert('Error', `Error saving session: ${errorData.error || 'Unknown error'}`, 'error');
+      }
+    } catch (error) {
+      console.error('Error saving room design session:', error);
+      showAlert('Error', 'Error saving room design session. Please try again.', 'error');
+    }
+  }, [roomType, selectedWall, roomDimensions, wallDesigns, loadedSessionKey]);
 
   // Function to open session modal and load available sessions
   const openSessionModal = useCallback(async () => {
@@ -253,7 +398,7 @@ const Main = ({ user, onLogout }) => {
       setIsSessionModalOpen(true);
     } catch (error) {
       console.error('Error loading sessions:', error);
-      alert('Error loading sessions. Please try again.');
+      showAlert('Error', 'Error loading sessions. Please try again.', 'error');
     }
   }, [fetchSessions]);
 
@@ -267,7 +412,7 @@ const Main = ({ user, onLogout }) => {
       
       if (!sessionId) {
         console.error('No session ID found');
-        alert('Error: No session ID found');
+        showAlert('Error', 'Error: No session ID found', 'error');
         return;
       }
 
@@ -317,15 +462,15 @@ const Main = ({ user, onLogout }) => {
         }
         
         console.log('Room design loaded from session successfully:', roomDesign);
-        alert(`Room design loaded successfully from session: ${session.displayName}`);
+        showAlert('Success', `Room design loaded successfully from session: ${session.displayName}`, 'success');
       } else {
         const errorData = await response.json();
         console.error('Error loading session:', errorData);
-        alert(`Error loading session: ${errorData.error || 'Unknown error'}`);
+        showAlert('Error', `Error loading session: ${errorData.error || 'Unknown error'}`, 'error');
       }
     } catch (error) {
       console.error('Error loading room design session:', error);
-      alert('Error loading room design session. Please try again.');
+      showAlert('Error', 'Error loading room design session. Please try again.', 'error');
     }
   }, []);
 
@@ -344,84 +489,96 @@ const Main = ({ user, onLogout }) => {
         // Remove from available sessions list
         setAvailableSessions(prev => prev.filter(s => s.key !== session.key));
         console.log('Session deleted successfully:', session.displayName);
-        alert(`Session "${session.displayName}" deleted successfully.`);
+        showAlert('Success', `Session "${session.displayName}" deleted successfully.`, 'success');
       } else {
         const errorData = await response.json();
-        alert(`Error deleting session: ${errorData.error || 'Unknown error'}`);
+        showAlert('Error', `Error deleting session: ${errorData.error || 'Unknown error'}`, 'error');
       }
     } catch (error) {
       console.error('Error deleting session:', error);
-      alert('Error deleting session. Please try again.');
+      showAlert('Error', 'Error deleting session. Please try again.', 'error');
     }
   }, []);
 
   // Function to create new session (clear all walls)
   const newSession = useCallback(() => {
-    if (window.confirm('Are you sure you want to start a new session? This will clear all current wall designs.')) {
-      // Reset room state to initial values
-      setRoomType('');
-      setSelectedWall('');
-      setRoomDimensions({ length: 8, width: 8, height: 4 });
-      // Clear all wall designs
-      const emptyDesigns = {
-        front: { elements: [], wallpaper: null },
-        back: { elements: [], wallpaper: null },
-        left: { elements: [], wallpaper: null },
-        right: { elements: [], wallpaper: null }
-      };
-      setWallDesigns(emptyDesigns);
-      // Clear current canvas
-      setElements([]);
-      setWallpaper(null);
-      setLoadedSessionKey(null);
-      setLoadedSessionName(null);
-      console.log('New session started - all walls cleared');
-      alert('New session started! All walls have been cleared.');
-    }
+    showConfirmation(
+      'Start New Session',
+      'Are you sure you want to start a new session? This will clear all current wall designs.',
+      () => {
+        // Reset room state to initial values
+        setRoomType('');
+        setSelectedWall('');
+        setRoomDimensions({ length: 8, width: 8, height: 4 });
+        // Clear all wall designs
+        const emptyDesigns = {
+          front: { elements: [], wallpaper: null },
+          back: { elements: [], wallpaper: null },
+          left: { elements: [], wallpaper: null },
+          right: { elements: [], wallpaper: null }
+        };
+        setWallDesigns(emptyDesigns);
+        // Clear current canvas
+        setElements([]);
+        setWallpaper(null);
+        setLoadedSessionKey(null);
+        setLoadedSessionName(null);
+        console.log('New session started - all walls cleared');
+        showAlert('Success', 'New session started! All walls have been cleared.', 'success');
+      }
+    );
   }, []);
 
   // Function to save as new session (force new session creation)
   const saveAsNewSession = useCallback(async () => {
-    try {
-      const defaultName = `${roomType || 'Room'} - ${new Date().toLocaleString()}`;
-      const sessionName = prompt('Enter a name for this new session:', defaultName);
-      if (!sessionName || !sessionName.trim()) {
-        alert('Session name is required. Save cancelled.');
-        return;
+    const defaultName = `${roomType || 'Room'} - ${new Date().toLocaleString()}`;
+    
+    showInputModal(
+      'Save as New Session',
+      'Enter a name for this new session:',
+      defaultName,
+      'Enter session name...',
+      async (sessionName) => {
+        if (!sessionName || !sessionName.trim()) {
+          showAlert('Session Name Required', 'Session name is required. Save cancelled.', 'error');
+          return;
+        }
+
+        try {
+          const sessionData = {
+            session_name: sessionName.trim(),
+            room_type: roomType,
+            room_dimensions: roomDimensions,
+            wall_designs: wallDesigns,
+            selected_wall: selectedWall
+          };
+
+          const response = await fetch(`${API_BASE_URL}/sessions`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify(sessionData),
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            const sessionId = data.session._id;
+            setLoadedSessionKey(sessionId);
+            setLoadedSessionName(sessionName.trim());
+            console.log('Room design saved as new session successfully');
+            showAlert('Success', 'Room design saved as new session!', 'success');
+          } else {
+            const errorData = await response.json();
+            showAlert('Error', `Error saving session: ${errorData.error || 'Unknown error'}`, 'error');
+          }
+        } catch (error) {
+          console.error('Error saving room design as new session:', error);
+          showAlert('Error', 'Error saving room design as new session. Please try again.', 'error');
+        }
       }
-
-      const sessionData = {
-        session_name: sessionName.trim(),
-        room_type: roomType,
-        room_dimensions: roomDimensions,
-        wall_designs: wallDesigns,
-        selected_wall: selectedWall
-      };
-
-      const response = await fetch(`${API_BASE_URL}/sessions`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify(sessionData),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        const sessionId = data.session._id;
-        setLoadedSessionKey(sessionId);
-        setLoadedSessionName(sessionName.trim());
-        console.log('Room design saved as new session successfully');
-        alert(`Room design saved as new session!`);
-      } else {
-        const errorData = await response.json();
-        alert(`Error saving session: ${errorData.error || 'Unknown error'}`);
-      }
-    } catch (error) {
-      console.error('Error saving room design as new session:', error);
-      alert('Error saving room design as new session. Please try again.');
-    }
+    );
   }, [roomType, selectedWall, roomDimensions, wallDesigns]);
 
   // Callback to update canvas size from Canvas component
@@ -684,7 +841,7 @@ const Main = ({ user, onLogout }) => {
     if (user.role === 'admin') {
       setIsAdminPanelOpen(true);
     } else {
-      alert('Admin access required. Only admin users can access the admin panel.');
+      showAlert('Access Denied', 'Admin access required. Only admin users can access the admin panel.', 'error');
     }
   };
 
@@ -805,6 +962,32 @@ const Main = ({ user, onLogout }) => {
           onClose={() => setIsAdminPanelOpen(false)}
         />
       )}
+
+      {/* Alert Modal */}
+      <AlertModal
+        isOpen={alertModal.isOpen}
+        title={alertModal.title}
+        message={alertModal.message}
+        type={alertModal.type}
+        onConfirm={alertModal.onConfirm}
+        onCancel={alertModal.onCancel}
+        confirmText={alertModal.confirmText}
+        cancelText={alertModal.cancelText}
+        showCancel={alertModal.showCancel}
+      />
+
+      {/* Input Modal */}
+      <InputModal
+        isOpen={inputModal.isOpen}
+        title={inputModal.title}
+        message={inputModal.message}
+        defaultValue={inputModal.defaultValue}
+        placeholder={inputModal.placeholder}
+        onConfirm={inputModal.onConfirm}
+        onCancel={inputModal.onCancel}
+        confirmText={inputModal.confirmText}
+        cancelText={inputModal.cancelText}
+      />
     </div>
   );
 };
