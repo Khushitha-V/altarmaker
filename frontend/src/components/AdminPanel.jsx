@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_BASE_URL } from '../config';
 import './AdminPanel.css';
 import AlertModal from './AlertModal';
 
@@ -55,7 +56,7 @@ const AdminPanel = ({ user, onClose }) => {
     });
   };
 
-  const API_BASE_URL = 'http://localhost:5000/api';
+
 
   // Fetch admin statistics
   const fetchStats = async () => {

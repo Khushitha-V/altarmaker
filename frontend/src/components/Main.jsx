@@ -9,6 +9,7 @@ import SessionModal from "./SessionModal";
 import AlertModal from "./AlertModal";
 import InputModal from "./InputModal";
 import AdminPanel from "./AdminPanel";
+import { API_BASE_URL } from '../config';
 import "./Main.css";
 
 // Helper to generate a random color (same as in Canvas.jsx)
@@ -57,8 +58,7 @@ const Main = ({ user, onLogout }) => {
     selectedWallRef.current = selectedWall;
   }, [selectedWall]);
 
-  // API Base URL
-  const API_BASE_URL = 'http://localhost:5000/api';
+
 
   // Track loaded session key and name
   const [loadedSessionKey, setLoadedSessionKey] = React.useState(null);

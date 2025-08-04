@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../config';
 import './Home.css';
 
 const Home = ({ onLogin }) => {
@@ -13,7 +14,7 @@ const Home = ({ onLogin }) => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const API_BASE_URL = 'http://localhost:5000/api';
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
