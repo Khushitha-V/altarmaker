@@ -2,7 +2,7 @@ import os
 import json
 from datetime import datetime, timedelta
 from functools import wraps
-from flask import Flask, request, jsonify, session
+from flask import Flask, request, jsonify, session, send_from_directory
 from flask_cors import CORS
 from pymongo import MongoClient
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../frontend/dist', static_url_path='')
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['MONGO_URI'] = os.getenv('MONGO_URI')
 
@@ -664,6 +664,22 @@ def get_admin_stats():
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+# Frontend serving routes
+@app.route('/')
+def serve_home():
+    """Serve the React app home page"""
+    return send_from_directory(app.static_folder, 'index.html')
+
+@app.route('/<path:path>')
+def serve_static(path):
+    """Serve static files from the React build"""
+    return send_from_directory(app.static_folder, path)
+
+@app.errorhandler(404)
+def not_found(e):
+    """Handle React Router routes by serving index.html"""
+    return send_from_directory(app.static_folder, 'index.html')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
