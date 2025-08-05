@@ -63,7 +63,7 @@ const AdminPanel = ({ user, onClose }) => {
     setIsLoading(true);
     setError('');
     try {
-      const response = await fetch(`${API_BASE_URL}/admin/stats`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/stats`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ const AdminPanel = ({ user, onClose }) => {
     setIsLoading(true);
     setError('');
     try {
-      const response = await fetch(`${API_BASE_URL}/admin/users`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/users`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -121,7 +121,7 @@ const AdminPanel = ({ user, onClose }) => {
       confirmMessage,
       async () => {
         try {
-          const response = await fetch(`${API_BASE_URL}/admin/users/${userId}`, {
+          const response = await fetch(`${API_BASE_URL}/api/admin/users/${userId}`, {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json',
@@ -147,7 +147,7 @@ const AdminPanel = ({ user, onClose }) => {
   // Create admin user
   const createAdminUser = async (userData) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/admin/users`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/users`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -181,7 +181,7 @@ const AdminPanel = ({ user, onClose }) => {
       confirmMessage,
       async () => {
         try {
-          const response = await fetch(`${API_BASE_URL}/admin/users/${userId}/promote`, {
+          const response = await fetch(`${API_BASE_URL}/api/admin/users/${userId}/promote`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
@@ -217,7 +217,7 @@ const AdminPanel = ({ user, onClose }) => {
       confirmMessage,
       async () => {
         try {
-          const response = await fetch(`${API_BASE_URL}/admin/users/${userId}/demote`, {
+          const response = await fetch(`${API_BASE_URL}/api/admin/users/${userId}/demote`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
