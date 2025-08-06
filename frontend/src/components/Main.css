@@ -20,6 +20,9 @@
   border-right: 3px solid rgba(114, 56, 61, 0.4);
   animation: slideInLeft 0.6s ease-out;
   font-family: 'Comic Neue', cursive;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 100vh;
 }
 
 @keyframes slideInLeft {
@@ -31,6 +34,19 @@
     transform: translateX(0);
     opacity: 1;
   }
+}
+
+/* Custom scrollbar for sidebar */
+.sidebar-container::-webkit-scrollbar {
+  width: 10px;
+}
+.sidebar-container::-webkit-scrollbar-thumb {
+  background: #deacd1;
+  border-radius: 8px;
+}
+.sidebar-container::-webkit-scrollbar-track {
+  background: #f9f4f0;
+  border-radius: 8px;
 }
 
 .canvas-container {

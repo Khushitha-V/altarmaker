@@ -466,6 +466,41 @@
   font-weight: 600;
   animation: slideInRight 0.6s ease-out;
   font-family: 'Comic Neue', cursive;
+  max-height: 120px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar for error message */
+.error-message::-webkit-scrollbar {
+  width: 8px;
+}
+.error-message::-webkit-scrollbar-thumb {
+  background: #deacd1;
+  border-radius: 8px;
+}
+.error-message::-webkit-scrollbar-track {
+  background: #f9f4f0;
+  border-radius: 8px;
+}
+
+/* Ensure login-card always scrolls if content overflows */
+.login-card {
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 500px;
+}
+
+.login-card::-webkit-scrollbar {
+  width: 8px;
+}
+.login-card::-webkit-scrollbar-thumb {
+  background: #deacd1;
+  border-radius: 8px;
+}
+.login-card::-webkit-scrollbar-track {
+  background: #f9f4f0;
+  border-radius: 8px;
 }
 
 /* Responsive design */

@@ -168,12 +168,27 @@
 }
 
 .admin-panel-content {
-  flex: 1;
+  flex: 1 1 auto;
+  min-height: 0;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 24px;
   background: linear-gradient(135deg, #ffffff 0%, #f9f4f0 25%, #f8e4c4 50%, #f8ac8c 75%, #deacd1 100%);
   animation: fadeInUp 0.8s ease-out;
   font-family: 'Comic Neue', cursive;
+}
+
+/* Custom scrollbar for admin panel */
+.admin-panel-content::-webkit-scrollbar {
+  width: 10px;
+}
+.admin-panel-content::-webkit-scrollbar-thumb {
+  background: #deacd1;
+  border-radius: 8px;
+}
+.admin-panel-content::-webkit-scrollbar-track {
+  background: #f9f4f0;
+  border-radius: 8px;
 }
 
 @keyframes fadeInUp {

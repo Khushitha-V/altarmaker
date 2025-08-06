@@ -4,6 +4,22 @@
   min-height: 100vh;
   background: linear-gradient(180deg, #f9f4f0 0%, #f8e4c4 25%, #f8ac8c 50%, #deacd1 75%, #d2e4e8 100%);
   font-family: 'Comic Neue', cursive;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 100vh;
+}
+
+/* Custom scrollbar for welcome page */
+.welcome-container::-webkit-scrollbar {
+  width: 10px;
+}
+.welcome-container::-webkit-scrollbar-thumb {
+  background: #deacd1;
+  border-radius: 8px;
+}
+.welcome-container::-webkit-scrollbar-track {
+  background: #f9f4f0;
+  border-radius: 8px;
 }
 
 @keyframes gradientShift {
