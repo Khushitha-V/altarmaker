@@ -37,7 +37,7 @@ const Home = ({ onLogin }) => {
           return;
         }
 
-        const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
+        const response = await fetch(`/api/auth/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -68,7 +68,7 @@ const Home = ({ onLogin }) => {
           return;
         }
 
-        const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+        const response = await fetch(`/api/auth/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

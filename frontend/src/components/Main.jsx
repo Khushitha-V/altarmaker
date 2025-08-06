@@ -147,7 +147,7 @@ const Main = ({ user, onLogout }) => {
   // Function to save wall designs to backend
   const saveWallDesignsToBackend = useCallback(async (designs) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/designs/wall-designs`, {
+      const response = await fetch(`/api/designs/wall-designs`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -172,7 +172,7 @@ const Main = ({ user, onLogout }) => {
   // Function to load wall designs from backend
   const loadWallDesignsFromBackend = useCallback(async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/designs/wall-designs`, {
+      const response = await fetch(`/api/designs/wall-designs`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -215,7 +215,7 @@ const Main = ({ user, onLogout }) => {
   const fetchSessions = useCallback(async () => {
     setIsLoadingSessions(true);
     try {
-      const response = await fetch(`${API_BASE_URL}/api/sessions`, {
+      const response = await fetch(`/api/sessions`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -297,7 +297,7 @@ const Main = ({ user, onLogout }) => {
       let response;
       if (isUpdate) {
         // Update existing session
-        response = await fetch(`${API_BASE_URL}/api/sessions/${sessionId}`, {
+        response = await fetch(`/api/sessions/${sessionId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -307,7 +307,7 @@ const Main = ({ user, onLogout }) => {
         });
       } else {
         // Create new session
-        response = await fetch(`${API_BASE_URL}/api/sessions`, {
+        response = await fetch(`/api/sessions`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -352,7 +352,7 @@ const Main = ({ user, onLogout }) => {
       let response;
       if (isUpdate) {
         // Update existing session
-        response = await fetch(`${API_BASE_URL}/api/sessions/${sessionId}`, {
+        response = await fetch(`/api/sessions/${sessionId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -362,7 +362,7 @@ const Main = ({ user, onLogout }) => {
         });
       } else {
         // Create new session
-        response = await fetch(`${API_BASE_URL}/api/sessions`, {
+        response = await fetch(`/api/sessions`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -416,7 +416,7 @@ const Main = ({ user, onLogout }) => {
         return;
       }
 
-      const response = await fetch(`${API_BASE_URL}/api/sessions/${sessionId}`, {
+      const response = await fetch(`/api/sessions/${sessionId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -477,7 +477,7 @@ const Main = ({ user, onLogout }) => {
   // Function to delete a session from backend
   const deleteSession = useCallback(async (session) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/sessions/${session.key}`, {
+      const response = await fetch(`/api/sessions/${session.key}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -553,7 +553,7 @@ const Main = ({ user, onLogout }) => {
             selected_wall: selectedWall
           };
 
-          const response = await fetch(`${API_BASE_URL}/api/sessions`, {
+          const response = await fetch(`/api/sessions`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -798,7 +798,19 @@ const Main = ({ user, onLogout }) => {
     };
     updateElements([...elements, newElement]);
   };
-
+  const handleLogout = async () => {
+    try {
+      await fetch(`/api/auth/logout`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+    } catch (error) {
+      console.error('Error during logout:', error);
+    } finally {
+      onLogout();   // Clear user from React state
+      navigate('/'); // Redirect to login or welcome
+    }
+  };
   const addSticker = (stickerPath = "/marigold3.png") => {
     const newElement = {
       id: uuidv4(),
@@ -829,10 +841,6 @@ const Main = ({ user, onLogout }) => {
     updateElements([...elements, newElement]);
   };
 
-  const handleLogout = () => {
-    onLogout();
-    navigate('/');
-  };
 
   // Admin-specific functions
   const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false);
