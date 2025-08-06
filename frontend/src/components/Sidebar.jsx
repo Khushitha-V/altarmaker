@@ -2,6 +2,7 @@ import React, { useState, useCallback } from "react";
 import Cropper from "react-easy-crop";
 import html2canvas from "html2canvas";
 import AlertModal from "./AlertModal";
+import { useNavigate } from 'react-router-dom';
 
 const initialFrames = [
   { type: "rectangle", label: "Square" },
@@ -43,6 +44,7 @@ function getCroppedImg(imageSrc, croppedAreaPixels, targetWidth, targetHeight) {
 }
 
 const Sidebar = ({ addFrame, addSticker, stickers, stickerCategories = [], setWallpaper, canvasWidth = 600, canvasHeight = 900, canvasRef, wallpaper, setIsDownloadMode, elements = [], onRoomChange, onWallChange, onDimensionsChange, selectedRoom, selectedWall, dimensions, wallDesigns = {}, saveRoomDesign, saveAsNewSession }) => {
+  const navigate = useNavigate();
   const [showCropper, setShowCropper] = useState(false);
   const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });

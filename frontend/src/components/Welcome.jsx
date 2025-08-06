@@ -1,7 +1,8 @@
 import React from "react";
 import "./Welcome.css";
 
-const Welcome = ({ onLogin, onRegister }) => {
+const Welcome = ({ onLogin, onRegister }) =>
+   {
   return (
     <div className="welcome-container">
       {/* Header */}

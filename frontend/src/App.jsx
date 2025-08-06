@@ -44,7 +44,7 @@ const App = () => {
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/auth/status`, {
+        const response = await fetch(`/api/auth/status`, {
           method: 'GET',
           credentials: 'include',
         });
@@ -72,16 +72,25 @@ const App = () => {
 
   const handleLogout = async () => {
     try {
-      await fetch(`${API_BASE_URL}/api/auth/logout`, {
+      await fetch(`/api/auth/logout`, {
         method: 'POST',
         credentials: 'include',
       });
     } catch (error) {
       console.error('Error during logout:', error);
     } finally {
+      localStorage.removeItem('token');
+      sessionStorage.clear();
+      document.cookie = "session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  
       setUser(null);
+  
+      // ✅ You already have navigation logic here
+      navigate('/');
     }
   };
+  
+  
 
   const handleWelcomeLogin = () => {
     // Navigate to login page
