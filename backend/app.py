@@ -681,5 +681,83 @@ def not_found(e):
     """Handle React Router routes by serving index.html"""
     return send_from_directory(app.static_folder, 'index.html')
 
+@app.route('/api/feedback', methods=['GET'])
+def get_feedback():
+    """
+    Get all feedback entries
+    No authentication required as this is a public endpoint
+    """
+    try:
+        feedback = list(db.feedback.find({}, {'_id': 0, 'email': 0}).sort('date', -1))
+        return jsonify({
+            'success': True,
+            'data': feedback
+        }), 200
+    except Exception as e:
+        print(f"Error fetching feedback: {e}")
+        return jsonify({
+            'success': False,
+            'error': 'Failed to fetch feedback'
+        }), 500
+
+@app.route('/api/feedback', methods=['POST'])
+def submit_feedback():
+    """
+    Submit new feedback
+    No authentication required as this is a public endpoint
+    """
+    try:
+        data = request.get_json()
+        
+        # Validate required fields
+        required_fields = ['name', 'email', 'message', 'rating']
+        if not all(field in data for field in required_fields):
+            return jsonify({
+                'success': False,
+                'error': 'Missing required fields'
+            }), 400
+            
+        # Validate rating is between 1-5
+        if not isinstance(data['rating'], int) or data['rating'] < 1 or data['rating'] > 5:
+            return jsonify({
+                'success': False,
+                'error': 'Rating must be between 1 and 5'
+            }), 400
+            
+        # Create feedback document
+        feedback = {
+            'name': data['name'],
+            'email': data['email'],
+            'message': data['message'],
+            'rating': data['rating'],
+            'date': datetime.utcnow().isoformat(),
+            'approved': False  # Admin can approve feedback before showing publicly
+        }
+        
+        # Insert into database
+        result = db.feedback.insert_one(feedback)
+        feedback['id'] = str(result.inserted_id)
+        
+        # Don't return email in the response for privacy
+        del feedback['email']
+        del feedback['_id']
+        
+        return jsonify({
+            'success': True,
+            'data': feedback
+        }), 201
+        
+    except Exception as e:
+        print(f"Error submitting feedback: {e}")
+        return jsonify({
+            'success': False,
+            'error': 'Failed to submit feedback'
+        }), 500
+
 if __name__ == '__main__':
+    # Create indexes for feedback collection
+    db.feedback.create_index('date')
+    db.feedback.create_index('rating')
+    db.feedback.create_index('approved')
+    
     app.run(debug=True, host='0.0.0.0', port=5000)

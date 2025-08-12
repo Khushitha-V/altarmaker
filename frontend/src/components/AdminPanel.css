@@ -12,12 +12,6 @@
   justify-content: center;
   z-index: 1000;
   backdrop-filter: blur(8px);
-  animation: fadeIn 0.4s ease-out;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
 
 .admin-panel {
@@ -31,20 +25,9 @@
   display: flex;
   flex-direction: column;
   border: 3px solid rgba(114, 56, 61, 0.4);
-  animation: slideInUp 0.6s ease-out;
   font-family: 'Comic Neue', cursive;
 }
 
-@keyframes slideInUp {
-  from {
-    opacity: 0;
-    transform: translateY(50px) scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
 
 .admin-panel-header {
   background: linear-gradient(135deg, #f9f4f0 0%, #f8e4c4 25%, #f8ac8c 50%, #deacd1 75%, #d2e4e8 100%);
@@ -66,12 +49,7 @@
   width: 100%;
   height: 100%;
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-  animation: shimmer 3s infinite;
-}
 
-@keyframes shimmer {
-  0% { left: -100%; }
-  100% { left: 100%; }
 }
 
 .admin-panel-header h2 {
@@ -81,12 +59,6 @@
   color: #72383d;
   font-family: 'Comic Neue', cursive;
 }
-
-@keyframes textGlow {
-  from { filter: drop-shadow(0 0 2px rgba(248, 172, 140, 0.3)); }
-  to { filter: drop-shadow(0 0 8px rgba(248, 172, 140, 0.6)); }
-}
-
 .close-button {
   background: #0f0960;
   background-color: #0f0960;
@@ -103,11 +75,6 @@
   font-family: 'Comic Neue', cursive;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-}
-
-@keyframes buttonPulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
 }
 
 .close-button:hover {
@@ -174,7 +141,6 @@
   overflow-x: hidden;
   padding: 24px;
   background: linear-gradient(135deg, #ffffff 0%, #f9f4f0 25%, #f8e4c4 50%, #f8ac8c 75%, #deacd1 100%);
-  animation: fadeInUp 0.8s ease-out;
   font-family: 'Comic Neue', cursive;
 }
 
@@ -233,7 +199,6 @@
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-  animation: float 6s ease-in-out infinite;
   font-family: 'Comic Neue', cursive;
 }
 
@@ -278,15 +243,8 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: numberGlow 2s ease-in-out infinite alternate;
   font-family: 'Comic Neue', cursive;
 }
-
-@keyframes numberGlow {
-  from { filter: drop-shadow(0 0 2px rgba(248, 172, 140, 0.3)); }
-  to { filter: drop-shadow(0 0 8px rgba(248, 172, 140, 0.6)); }
-}
-
 .users-list {
   display: flex;
   flex-direction: column;
@@ -305,20 +263,9 @@
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-  animation: slideInRight 0.6s ease-out;
   font-family: 'Comic Neue', cursive;
 }
 
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
 
 .user-card::before {
   content: '';
@@ -364,13 +311,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  animation: badgePulse 2s ease-in-out infinite;
   font-family: 'Comic Neue', cursive;
-}
-
-@keyframes badgePulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
 }
 
 .role-badge.admin {
