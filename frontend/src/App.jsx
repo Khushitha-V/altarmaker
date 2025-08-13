@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Welcome from './components/Welcome';
 import Home from './components/Home';
 import Main from './components/Main';
+import VerifyEmail from './components/VerifyEmail';
 import { API_BASE_URL } from './config';
 import './App.css';
 
@@ -134,6 +135,10 @@ const App = () => {
               user ? <Main user={user} onLogout={handleLogout} /> : <Navigate to="/" replace />
             } 
             />
+          <Route 
+            path="/verify-email" 
+            element={<VerifyEmail />} 
+          />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
