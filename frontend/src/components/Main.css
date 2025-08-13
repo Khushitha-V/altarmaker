@@ -6,14 +6,9 @@
 /* Additional Main component styles with new color palette */
 .app-container {
   background: linear-gradient(180deg, #f9f4f0 0%, #f8e4c4 25%, #f8ac8c 50%, #deacd1 75%, #d2e4e8 100%);
-  animation: gradientShift 8s ease-in-out infinite;
   font-family: 'Comic Neue', cursive;
 }
 
-@keyframes gradientShift {
-  0%, 100% { background: linear-gradient(180deg, #f9f4f0 0%, #f8e4c4 25%, #f8ac8c 50%, #deacd1 75%, #d2e4e8 100%); }
-  50% { background: linear-gradient(180deg, #d2e4e8 0%, #deacd1 25%, #f8ac8c 50%, #f8e4c4 75%, #f9f4f0 100%); }
-}
 
 .sidebar-container {
   background: linear-gradient(180deg, #ffffff 0%, #f9f4f0 25%, #f8e4c4 50%, #f8ac8c 75%, #deacd1 100%);
