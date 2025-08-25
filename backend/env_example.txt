@@ -1,0 +1,19 @@
+MONGO_URI=YOUR__MONGO__URI
+MONGODB_DBNAME= DATABASE_NAME
+SECRET_KEY=your_secrect_key
+JWT_SECRET_KEY=your_jwt_secret_key
+APP_URL=app__url
+
+# Email Configuration
+MAIL_SERVER=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USE_TLS=true
+MAIL_USERNAME=your_email_id
+MAIL_PASSWORD=your_email_app_password
+MAIL_DEFAULT_SENDER=your_email_id
+
+# Application URL (Frontend - updated port to 5173)
+APP_URL=http://localhost:5173
+
+# CORS Configuration (updated with port 5173)
+CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
