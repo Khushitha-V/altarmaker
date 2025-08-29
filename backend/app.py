@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from functools import wraps
 from flask import Flask, request, jsonify, session, send_from_directory, current_app
 from flask_cors import CORS
-from flask_mail import Mail
+from extensions import mail
 from pymongo import MongoClient
 from werkzeug.security import generate_password_hash, check_password_hash
 from bson import ObjectId
@@ -12,8 +12,7 @@ from dotenv import load_dotenv
 import traceback
 
 # Import email utilities
-from email_utils import generate_verification_token, send_verification_email, send_welcome_email
-from email_utils import verify_token
+from email_utils import generate_verification_token, send_verification_email, send_welcome_email, verify_token
 
 import logging
 load_dotenv()
@@ -27,7 +26,8 @@ app = Flask(__name__, static_folder='../frontend/dist', static_url_path='')
 app.config.from_object('config.Config')
 
 # Initialize Flask-Mail
-mail = Mail(app)
+from extensions import init_mail
+init_mail(app)
 
 # Initialize MongoDB Atlas connection
 client = MongoClient(os.getenv('MONGO_URI'))

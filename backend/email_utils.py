@@ -1,8 +1,8 @@
 from flask import url_for, current_app
-from flask_mail import Message, Mail
+from flask_mail import Message
 from itsdangerous import URLSafeTimedSerializer
 from datetime import datetime, timedelta
-from app import mail
+from extensions import mail
 import logging
 
 # Configure logging
@@ -60,8 +60,7 @@ def send_verification_email(recipient_email, token):
         # Log email attempt (without sensitive data)
         current_app.logger.info(f"Attempting to send verification email to {recipient_email}")
         
-        # Send the email
-        mail = Mail(current_app)
+        # Send the email using the pre-configured mail instance
         mail.send(msg)
         
         current_app.logger.info(f"Verification email sent to {recipient_email}")
