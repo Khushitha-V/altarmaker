@@ -2,6 +2,12 @@ from flask import url_for, current_app
 from flask_mail import Message, Mail
 from itsdangerous import URLSafeTimedSerializer
 from datetime import datetime, timedelta
+from app import mail
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def generate_verification_token(email):
     """Generate a secure token for email verification"""
@@ -65,7 +71,7 @@ def send_verification_email(recipient_email, token):
         error_msg = f"Failed to send verification email to {recipient_email}: {str(e)}"
         current_app.logger.error(error_msg)
         # Print to console as well in case logging isn't configured
-        print(f"ERROR: {error_msg}")
+        logger.info(f"ERROR: {error_msg}")
         return False
 
 def send_welcome_email(recipient_email, username):
@@ -118,7 +124,6 @@ def send_welcome_email(recipient_email, username):
     )
     
     try:
-        from app import mail
         mail.send(msg)
         return True
     except Exception as e:

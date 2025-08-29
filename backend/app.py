@@ -9,9 +9,11 @@ from pymongo import MongoClient
 from werkzeug.security import generate_password_hash, check_password_hash
 from bson import ObjectId
 from dotenv import load_dotenv
+import traceback
 
 # Import email utilities
 from email_utils import generate_verification_token, send_verification_email, send_welcome_email
+from email_utils import verify_token
 
 import logging
 load_dotenv()
@@ -19,7 +21,6 @@ load_dotenv()
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-# Load environment variables
 
 
 app = Flask(__name__, static_folder='../frontend/dist', static_url_path='')
@@ -255,7 +256,7 @@ def verify_email():
             return jsonify({'error': 'Verification token is required'}), 400
         
         # Verify token and get email
-        from email_utils import verify_token
+       
         email = verify_token(token)
         print(f"Decoded email from token: {email}")
         
@@ -313,7 +314,6 @@ def verify_email():
         
     except Exception as e:
         print(f"Error in verify_email: {str(e)}")
-        import traceback
         traceback.print_exc()
         return jsonify({
             'error': 'An error occurred during email verification',

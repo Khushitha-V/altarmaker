@@ -4,10 +4,16 @@ Script to test admin login directly against the backend.
 import requests
 import os
 from dotenv import load_dotenv
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+load_dotenv()
 
 def test_admin_login():
     # Load environment variables
-    load_dotenv()
     
     # Get the base URL from environment or use default
     base_url = os.getenv('APP_URL', 'http://localhost:5000')
@@ -20,8 +26,8 @@ def test_admin_login():
         "role": "admin"
     }
     
-    print(f"Testing admin login at: {login_url}")
-    print("Using test data:", {k: v if k != 'password' else '***' for k, v in test_data.items()})
+    logger.info(f"Testing admin login at: {login_url}")
+    logger.info("Using test data:", {k: v if k != 'password' else '***' for k, v in test_data.items()})
     
     try:
         # Make the login request
@@ -32,19 +38,19 @@ def test_admin_login():
             allow_redirects=True
         )
         
-        print("\nResponse Status Code:", response.status_code)
-        print("Response Headers:", dict(response.headers))
-        print("Response Body:", response.text)
+        logger.info("\nResponse Status Code:", response.status_code)
+        logger.info("Response Headers:", dict(response.headers))
+        logger.info("Response Body:", response.text)
         
         if response.status_code == 200:
-            print("\n✅ Login successful!")
-            print("User data:", response.json().get('user', 'No user data'))
+            logger.info("\n✅ Login successful!")
+            logger.info("User data:", response.json().get('user', 'No user data'))
         else:
-            print(f"\n❌ Login failed with status {response.status_code}")
-            print("Error:", response.json().get('error', 'No error message'))
+            logger.info(f"\n❌ Login failed with status {response.status_code}")
+            logger.info("Error:", response.json().get('error', 'No error message'))
             
     except Exception as e:
-        print(f"\n❌ Error making request: {str(e)}")
+        logger.info(f"\n❌ Error making request: {str(e)}")
 
 if __name__ == "__main__":
     test_admin_login()
