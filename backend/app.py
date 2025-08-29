@@ -43,7 +43,7 @@ def get_db():
         client.admin.command('ping')
         return db
     except Exception as e:
-        print(f"MongoDB connection error: {e}")
+        logger.info(f"MongoDB connection error: {e}")
         return None
 
 def validate_db_connection():
@@ -56,7 +56,7 @@ def validate_db_connection():
             return True
         return False
     except Exception as e:
-        print(f"MongoDB connection error: {e}")
+        logger.info(f"MongoDB connection error: {e}")
         return False
 
 # Enable CORS with specific origins and headers
@@ -236,11 +236,11 @@ def register():
                 }), 201
             
         except Exception as e:
-            print(f"Database error during registration: {e}")
+            logger.info(f"Database error during registration: {e}")
             return jsonify({'error': 'Database connection error'}), 500
         
     except Exception as e:
-        print(f"Error in register: {e}")
+        logger.info(f"Error in register: {e}")
         return jsonify({'error': 'Internal server error'}), 500
 
 
@@ -249,19 +249,19 @@ def verify_email():
     """Verify user's email using the verification token"""
     try:
         token = request.args.get('token')
-        print(f"Verification attempt with token: {token}")
+        logger.info(f"Verification attempt with token: {token}")
         
         if not token:
-            print("Error: No token provided")
+            logger.info("Error: No token provided")
             return jsonify({'error': 'Verification token is required'}), 400
         
         # Verify token and get email
        
         email = verify_token(token)
-        print(f"Decoded email from token: {email}")
+        logger.info(f"Decoded email from token: {email}")
         
         if not email:
-            print("Error: Invalid or expired token")
+            logger.info("Error: Invalid or expired token")
             return jsonify({'error': 'Invalid or expired verification link'}), 400
         
         # Find user by email (case-insensitive search)
@@ -270,14 +270,14 @@ def verify_email():
             'verification_token': token
         })
         
-        print(f"User found in DB: {user is not None}")
+        logger.info(f"User found in DB: {user is not None}")
         if not user:
             # Try to find if user exists but with different case
             user_with_email = db.users.find_one({
                 'email': {'$regex': f'^{email}$', '$options': 'i'}
             })
             if user_with_email:
-                print(f"User exists but token doesn't match. Stored token: {user_with_email.get('verification_token')}")
+                logger.info(f"User exists but token doesn't match. Stored token: {user_with_email.get('verification_token')}")
             return jsonify({
                 'error': 'Invalid verification link or user not found',
                 'details': 'The verification link is invalid or has expired. Please request a new verification email.'
@@ -294,14 +294,14 @@ def verify_email():
             }
         )
         
-        print(f"Update result - Matched: {result.matched_count}, Modified: {result.modified_count}")
+        logger.info(f"Update result - Matched: {result.matched_count}, Modified: {result.modified_count}")
         
         # Send welcome email
         try:
             send_welcome_email(email, user['username'])
-            print(f"Welcome email sent to {email}")
+            logger.info(f"Welcome email sent to {email}")
         except Exception as e:
-            print(f"Failed to send welcome email: {e}")
+            logger.info(f"Failed to send welcome email: {e}")
             # Continue even if welcome email fails
         
         # Return success response with redirect URL
@@ -313,8 +313,8 @@ def verify_email():
         }), 200
         
     except Exception as e:
-        print(f"Error in verify_email: {str(e)}")
-        traceback.print_exc()
+        logger.info(f"Error in verify_email: {str(e)}")
+        traceback.logger.info_exc()
         return jsonify({
             'error': 'An error occurred during email verification',
             'details': str(e)
@@ -387,11 +387,11 @@ def login():
             }), 200
             
         except Exception as e:
-            print(f"Database error during login: {e}")
+            logger.info(f"Database error during login: {e}")
             return jsonify({'error': 'Database connection error'}), 500
         
     except Exception as e:
-        print(f"Error in login: {e}")
+        logger.info(f"Error in login: {e}")
         return jsonify({'error': 'Internal server error'}), 500
 
 @app.route('/api/auth/logout', methods=['POST'])
@@ -448,7 +448,7 @@ def get_wall_designs():
                 'selectedWall': ''
             })
     except Exception as e:
-        print(f"Error getting wall designs: {e}")
+        logger.info(f"Error getting wall designs: {e}")
         return jsonify({'error': 'Failed to get wall designs'}), 500
 
 @app.route('/api/designs/wall-designs', methods=['POST'])
@@ -489,7 +489,7 @@ def save_wall_designs():
             'message': 'Wall designs saved successfully'
         })
     except Exception as e:
-        print(f"Error saving wall designs: {e}")
+        logger.info(f"Error saving wall designs: {e}")
         return jsonify({'error': 'Failed to save wall designs'}), 500
 
 @app.route('/api/sessions', methods=['GET'])
@@ -634,7 +634,7 @@ def resend_verification():
         }), 200
         
     except Exception as e:
-        print(f"Error in resend_verification: {e}")
+        logger.info(f"Error in resend_verification: {e}")
         return jsonify({'error': 'Failed to resend verification email'}), 500
         
 @app.route('/api/sessions/<session_id>', methods=['DELETE'])
@@ -867,7 +867,7 @@ def get_feedback():
             'data': feedback
         }), 200
     except Exception as e:
-        print(f"Error fetching feedback: {e}")
+        logger.info(f"Error fetching feedback: {e}")
         return jsonify({
             'success': False,
             'error': 'Failed to fetch feedback'
@@ -921,7 +921,7 @@ def submit_feedback():
         }), 201
         
     except Exception as e:
-        print(f"Error submitting feedback: {e}")
+        logger.info(f"Error submitting feedback: {e}")
         return jsonify({
             'success': False,
             'error': 'Failed to submit feedback'
