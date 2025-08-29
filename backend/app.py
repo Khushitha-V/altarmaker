@@ -13,9 +13,14 @@ from dotenv import load_dotenv
 # Import email utilities
 from email_utils import generate_verification_token, send_verification_email, send_welcome_email
 
-
-# Load environment variables
+import logging
 load_dotenv()
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+# Load environment variables
+
 
 app = Flask(__name__, static_folder='../frontend/dist', static_url_path='')
 app.config.from_object('config.Config')
@@ -27,7 +32,7 @@ mail = Mail(app)
 client = MongoClient(os.getenv('MONGO_URI'))
 db = client.altarmaker
 
-print(f"MongoDB connected: {db}")
+logger.info(f"MongoDB connected: {db}")
 
 # MongoDB connection validation
 def get_db():
