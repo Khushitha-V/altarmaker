@@ -9,6 +9,12 @@ import os
 import sys
 from dotenv import load_dotenv
 
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 # Load environment variables
 load_dotenv()
 
@@ -22,11 +28,11 @@ def check_environment():
             missing_vars.append(var)
     
     if missing_vars:
-        print("❌ Missing required environment variables:")
+        logger.info("❌ Missing required environment variables:")
         for var in missing_vars:
-            print(f"   - {var}")
-        print("\nPlease create a .env file with the required variables.")
-        print("See README.md for configuration details.")
+            logger.info(f"   - {var}")
+        logger.info("\nPlease create a .env file with the required variables.")
+        logger.info("See README.md for configuration details.")
         return False
     
     return True
@@ -35,16 +41,16 @@ def init_database():
     """Initialize database connection and create indexes"""
     try:
         from database import init_database
-        print("🔗 Connecting to MongoDB...")
+        logger.info("🔗 Connecting to MongoDB...")
         
         if init_database():
-            print("✅ Database initialized successfully")
+            logger.info("✅ Database initialized successfully")
             return True
         else:
-            print("❌ Failed to initialize database")
+            logger.info("❌ Failed to initialize database")
             return False
     except Exception as e:
-        print(f"❌ Database initialization error: {e}")
+        logger.info(f"❌ Database initialization error: {e}")
         return False
 
 def run_app():
@@ -64,20 +70,20 @@ def run_app():
         host = os.getenv('FLASK_HOST', '0.0.0.0')
         port = int(os.getenv('FLASK_PORT', 5000))
         
-        print(f"🚀 Starting AltarMaker Backend on {host}:{port}")
-        print(f"📊 Environment: {config_name}")
-        print(f"🔗 API Health Check: http://{host}:{port}/api/health")
+        logger.info(f"🚀 Starting AltarMaker Backend on {host}:{port}")
+        logger.info(f"📊 Environment: {config_name}")
+        logger.info(f"🔗 API Health Check: http://{host}:{port}/api/health")
         
         app.run(host=host, port=port, debug=app.config['DEBUG'])
         
     except Exception as e:
-        print(f"❌ Failed to start application: {e}")
+        logger.info(f"❌ Failed to start application: {e}")
         return False
 
 def main():
     """Main startup function"""
-    print("🎨 AltarMaker Backend")
-    print("=" * 30)
+    logger.info("🎨 AltarMaker Backend")
+    logger.info("=" * 30)
     
     # Check environment
     if not check_environment():

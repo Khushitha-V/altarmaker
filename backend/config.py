@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
-
+import logging
+from logging import StreamHandler
 # Load environment variables
 load_dotenv()
 
@@ -52,9 +53,6 @@ class ProductionConfig(Config):
     def init_app(cls, app):
         Config.init_app(app)
         
-        # Log to stderr in production
-        import logging
-        from logging import StreamHandler
         file_handler = StreamHandler()
         file_handler.setLevel(logging.INFO)
         app.logger.addHandler(file_handler)

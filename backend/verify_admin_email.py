@@ -5,10 +5,16 @@ Script to verify admin email in the database.
 import os
 from pymongo import MongoClient
 from dotenv import load_dotenv
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+load_dotenv()
 
 def verify_admin_email():
     # Load environment variables
-    load_dotenv()
     
     # Connect to MongoDB
     client = MongoClient(os.getenv('MONGO_URI'))
@@ -18,7 +24,7 @@ def verify_admin_email():
     admin = db.users.find_one({'role': 'admin'})
     
     if not admin:
-        print("❌ No admin user found in the database")
+        logger.info("❌ No admin user found in the database")
         return False
     
     # Update the admin's email verification status
@@ -28,10 +34,10 @@ def verify_admin_email():
     )
     
     if result.modified_count > 0:
-        print(f"✅ Successfully verified email for admin: {admin.get('username')} ({admin.get('email')})")
+        logger.info(f"✅ Successfully verified email for admin: {admin.get('username')} ({admin.get('email')})")
         return True
     else:
-        print("ℹ️ Admin email was already verified")
+        logger.info("ℹ️ Admin email was already verified")
         return True
 
 if __name__ == "__main__":
