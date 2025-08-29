@@ -9,6 +9,7 @@ from pymongo import MongoClient
 from werkzeug.security import generate_password_hash, check_password_hash
 from bson import ObjectId
 from dotenv import load_dotenv
+from email_utils import verify_token
 
 # Import email utilities
 from email_utils import generate_verification_token, send_verification_email, send_welcome_email
@@ -250,7 +251,7 @@ def verify_email():
             return jsonify({'error': 'Verification token is required'}), 400
         
         # Verify token and get email
-        from email_utils import verify_token
+        
         email = verify_token(token)
         print(f"Decoded email from token: {email}")
         
